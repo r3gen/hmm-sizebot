@@ -1,1 +1,3 @@
-# hmm-sizebot
+# hcm-sizebot
+
+Info to come
