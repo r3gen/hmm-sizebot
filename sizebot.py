@@ -5,7 +5,12 @@ from discord.ext import commands
 
 bot = commands.Bot(command_prefix='!')
 
-TOKEN = ''
+def read_token():
+    with open("token.txt", "r") as f:
+        lines = f.readlines()
+        return lines[0].strip()
+
+TOKEN = read_token()
 
 @bot.command()
 async def sizeme(ctx):
