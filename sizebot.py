@@ -30,8 +30,8 @@ async def sizeme(ctx):
 @bot.command()
 async def showsizes(ctx):
     msg = "All sizes:\n"
-    # for user in sizes.keys:
-    #    msg += user + ": " + sizes[user] + "\n"
+    for user in sizes.keys():
+        msg += user + ": " + sizes[user] + "\n"
     await ctx.send(msg)
     
 @bot.event
