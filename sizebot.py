@@ -1,9 +1,15 @@
 # Work with Python 3.6
+import datetime, time
 import random
 import discord
 from discord.ext import commands
+from configparser import ConfigParser
+from os import path
 
 bot = commands.Bot(command_prefix='!')
+
+
+
 
 def read_token():
     import os
@@ -14,37 +20,24 @@ def read_token():
             return lines[0].strip()
     '''
 
+
 TOKEN = read_token()
 
-sizes = {}
 
 @bot.command()
 async def sizeme(ctx):
-    size = get_size()
-    user = '{0.author.mention}'.format(ctx.message)
-    server = '{0.server.id}'.format(ctx.message)
-    msg = user + ' is ' + size + " tall."
+    msg = '{0.author.mention} is '.format(ctx.message) + get_size() + " tall."
     await ctx.send(msg)
-    # sizes[server].append(user, size)
-    
-@bot.command()
-async def showsizes(ctx):
-    """msg = ''
-    for entry in sizes['{0.server.id}'.format(ctx.message)]:
-        msg += entry[0] + ": " + entry[1]
-    """
-    await ctx.send("Feature coming soon...")
-    
+
+
 @bot.event
 async def on_ready():
     print('Logged in as')
     print(bot.user.name)
     print(bot.user.id)
     print('------')
-    
-def get_stats():
-    return null
-    
+
+
 def get_size():
     size = {
         1: "1 mm",
@@ -69,5 +62,32 @@ def get_size():
         20: "5000 foot"
     }
     return size.get(random.randint(1,20),"No size for you")
+
+
+def load_config():
+    filename = 'hcm_sizebot.ini'
+    config = ConfigParser()
+    if path.exists(filename):
+        config.read(filename)
+        if config["Default"]["last_reset"].date() < datetime.now().date():
+            for section in config.sections():
+                if section is not "Default":
+                    config.remove_section(section)
+            config["Default"]["last_reset"] = datetime.now()
+            save_config(config, filename)
+    else:
+        config['Default'] = {
+            "reset_hour": '5',
+            "last_reset": datetime.now()
+        }
+        save_config(config, filename)
+
+    return config
+
+
+def save_config(config, filename):
+    with open(filename, 'w') as config_file:
+        config.write(config_file)
+
 
 bot.run(TOKEN)
