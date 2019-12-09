@@ -16,17 +16,33 @@ def read_token():
 
 TOKEN = read_token()
 
+sizes = dict()
+
 @bot.command()
 async def sizeme(ctx):
-    msg = '{0.author.mention} is '.format(ctx.message) + get_size() + " tall."
+    size = get_size()
+    user = '{0.author.mention}'.format(ctx.message)
+    # server = '{0.server.id}'.format(ctx.message)
+    msg = user + ' is ' + size + " tall."
     await ctx.send(msg)
-
+    sizes[user] = size
+    
+@bot.command()
+async def showsizes(ctx):
+    msg = ''
+    for user in sizes.keys:
+        msg += user + ": " + sizes[user] + "\n"
+    await ctx.send(msg)
+    
 @bot.event
 async def on_ready():
     print('Logged in as')
     print(bot.user.name)
     print(bot.user.id)
     print('------')
+    
+def get_stats():
+    return null
     
 def get_size():
     size = {
