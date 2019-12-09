@@ -21,9 +21,9 @@ sizes = dict()
 @bot.command()
 async def sizeme(ctx):
     size = get_size()
-    user = '{0.author.mention}'.format(ctx.message)
+    user = '{0.author.name}'.format(ctx.message)
     # server = '{0.server.id}'.format(ctx.message)
-    msg = user + ' is ' + size + " tall."
+    msg = '{0.author.mention} is '.format(ctx.message) + size + " tall."
     await ctx.send(msg)
     sizes[user] = size
     
