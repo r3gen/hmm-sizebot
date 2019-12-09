@@ -16,34 +16,17 @@ def read_token():
 
 TOKEN = read_token()
 
-sizes = {}
-
 @bot.command()
 async def sizeme(ctx):
-    size = get_size()
-    user = '{0.author.mention}'.format(ctx.message)
-    server = '{0.server.id}'.format(ctx.message)
-    msg = user + ' is ' + size + " tall."
+    msg = '{0.author.mention} is '.format(ctx.message) + get_size() + " tall."
     await ctx.send(msg)
-    # sizes[server].append(user, size)
-    
-@bot.command()
-async def showsizes(ctx):
-    """msg = ''
-    for entry in sizes['{0.server.id}'.format(ctx.message)]:
-        msg += entry[0] + ": " + entry[1]
-    """
-    await ctx.send("Feature coming soon...")
-    
+
 @bot.event
 async def on_ready():
     print('Logged in as')
     print(bot.user.name)
     print(bot.user.id)
     print('------')
-    
-def get_stats():
-    return null
     
 def get_size():
     size = {
