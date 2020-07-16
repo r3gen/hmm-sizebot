@@ -63,7 +63,7 @@ async def sizeme(ctx):
         size = get_size()
     msg = '{0.author.mention} is '.format(ctx.message) + size + " tall."
     await ctx.send(msg)
-    sizes[user] = size
+    # sizes[user] = size
     if not config.has_section(server):
         config.add_section(server)
     config[server][user] = size
