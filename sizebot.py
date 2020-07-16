@@ -9,8 +9,6 @@ from os import path
 bot = commands.Bot(command_prefix='!')
 
 
-
-
 def read_token():
     import os
     return os.environ["SIZEBOT_TOKEN"]
@@ -20,13 +18,26 @@ def read_token():
             return lines[0].strip()
     '''
 
-
 TOKEN = read_token()
+
+sizes = dict()
 
 
 @bot.command()
 async def sizeme(ctx):
-    msg = '{0.author.mention} is '.format(ctx.message) + get_size() + " tall."
+    size = get_size()
+    user = '{0.author.display_name}'.format(ctx.message)
+    # server = '{0.server.id}'.format(ctx.message)
+    msg = '{0.author.mention} is '.format(ctx.message) + size + " tall."
+    await ctx.send(msg)
+    sizes[user] = size
+
+
+@bot.command()
+async def showsizes(ctx):
+    msg = "All sizes:\n"
+    for user in sizes.keys():
+        msg += user + ": " + sizes[user] + "\n"
     await ctx.send(msg)
 
 
@@ -36,6 +47,10 @@ async def on_ready():
     print(bot.user.name)
     print(bot.user.id)
     print('------')
+
+
+def get_stats():
+    return null
 
 
 def get_size():
