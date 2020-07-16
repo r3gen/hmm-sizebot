@@ -8,6 +8,33 @@ from os import path
 
 bot = commands.Bot(command_prefix='!')
 
+config_filename = 'hcm_sizebot.ini'
+
+
+def load_config():
+    bot_config = ConfigParser()
+    if path.exists(filename):
+        bot_config.read(filename)
+        if bot_config["Default"]["last_reset"].date() < datetime.now().date():
+            for section in config.sections():
+                if section is not "Default":
+                    bot_config.remove_section(section)
+            bot_config["Default"]["last_reset"] = datetime.now()
+            save_config(bot_config)
+    else:
+        config['Default'] = {
+            "reset_hour": '5',
+            "last_reset": datetime.now()
+        }
+        save_config(config)
+
+    return bot_config
+
+
+def save_config(bot_config):
+    with open(config_filename, 'w') as config_file:
+        bot_config.write(config_file)
+
 
 def read_token():
     import os
@@ -18,26 +45,37 @@ def read_token():
             return lines[0].strip()
     '''
 
+
 TOKEN = read_token()
 
 sizes = dict()
 
+config = load_config()
+
 
 @bot.command()
 async def sizeme(ctx):
-    size = get_size()
     user = '{0.author.display_name}'.format(ctx.message)
-    # server = '{0.server.id}'.format(ctx.message)
+    server = '{0.server.id}'.format(ctx.message)
+    if config.has_option(server, user):
+        size = config[server][user]
+    else:
+        size = get_size()
     msg = '{0.author.mention} is '.format(ctx.message) + size + " tall."
     await ctx.send(msg)
     sizes[user] = size
+    if not config.has_section(server):
+        config.add_section(server)
+    config[server][user] = size
+    save_config(config)
 
 
 @bot.command()
 async def showsizes(ctx):
+    server = '{0.server.id}'.format(ctx.message)
     msg = "All sizes:\n"
-    for user in sizes.keys():
-        msg += user + ": " + sizes[user] + "\n"
+    for user in config.options(server):
+        msg += user + ": " + config[server][user] + "\n"
     await ctx.send(msg)
 
 
@@ -77,32 +115,6 @@ def get_size():
         20: "5000 foot"
     }
     return size.get(random.randint(1,20),"No size for you")
-
-
-def load_config():
-    filename = 'hcm_sizebot.ini'
-    config = ConfigParser()
-    if path.exists(filename):
-        config.read(filename)
-        if config["Default"]["last_reset"].date() < datetime.now().date():
-            for section in config.sections():
-                if section is not "Default":
-                    config.remove_section(section)
-            config["Default"]["last_reset"] = datetime.now()
-            save_config(config, filename)
-    else:
-        config['Default'] = {
-            "reset_hour": '5',
-            "last_reset": datetime.now()
-        }
-        save_config(config, filename)
-
-    return config
-
-
-def save_config(config, filename):
-    with open(filename, 'w') as config_file:
-        config.write(config_file)
 
 
 bot.run(TOKEN)
