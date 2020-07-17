@@ -1,9 +1,10 @@
 # Work with Python 3.6
-import datetime, time
+
 import random
 import discord
-from discord.ext import commands
 from configparser import ConfigParser
+from datetime import datetime
+from discord.ext import commands
 from os import path
 
 bot = commands.Bot(command_prefix='!')
@@ -13,20 +14,21 @@ config_filename = 'hcm_sizebot.ini'
 
 def load_config():
     bot_config = ConfigParser()
-    if path.exists(filename):
-        bot_config.read(filename)
-        if bot_config["Default"]["last_reset"].date() < datetime.now().date():
+    if path.exists(config_filename):
+        bot_config.read(config_filename)
+        last_date = datetime.fromisoformat(bot_config["Default"]["last_reset"])
+        if last_date.date() < datetime.now().date():
             for section in config.sections():
-                if section is not "Default":
+                if section != "Default":
                     bot_config.remove_section(section)
-            bot_config["Default"]["last_reset"] = datetime.now()
+            bot_config["Default"]["last_reset"] = datetime.now().isoformat()
             save_config(bot_config)
     else:
-        config['Default'] = {
+        bot_config['Default'] = {
             "reset_hour": '5',
             "last_reset": datetime.now()
         }
-        save_config(config)
+        save_config(bot_config)
 
     return bot_config
 
@@ -37,13 +39,11 @@ def save_config(bot_config):
 
 
 def read_token():
-    import os
-    return os.environ["SIZEBOT_TOKEN"]
-    '''
-        with open("token.txt", "r") as f:
-            lines = f.readlines()
-            return lines[0].strip()
-    '''
+    # import os
+    # return os.environ["SIZEBOT_TOKEN"]
+    with open("token.txt", "r") as f:
+        lines = f.readlines()
+        return lines[0].strip()
 
 
 TOKEN = read_token()
