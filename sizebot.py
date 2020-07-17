@@ -56,7 +56,7 @@ config = load_config()
 @bot.command()
 async def sizeme(ctx):
     user = '{0.author.display_name}'.format(ctx.message)
-    server = '{0.server.id}'.format(ctx.message)
+    server = "{}".format(ctx.guild.id)
     if config.has_option(server, user):
         size = config[server][user]
     else:
@@ -72,7 +72,7 @@ async def sizeme(ctx):
 
 @bot.command()
 async def showsizes(ctx):
-    server = '{0.server.id}'.format(ctx.message)
+    server = '{}'.format(ctx.guild.id)
     msg = "All sizes:\n"
     for user in config.options(server):
         msg += user + ": " + config[server][user] + "\n"
