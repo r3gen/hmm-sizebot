@@ -18,7 +18,7 @@ def load_config():
         bot_config.read(config_filename)
         last_date = datetime.fromisoformat(bot_config["Default"]["last_reset"])
         if last_date.date() < datetime.now().date():
-            for section in config.sections():
+            for section in bot_config.sections():
                 if section != "Default":
                     bot_config.remove_section(section)
             bot_config["Default"]["last_reset"] = datetime.now().isoformat()
@@ -55,10 +55,10 @@ config = load_config()
 
 @bot.command()
 async def sizeme(ctx):
-    user = '{0.author.display_name}'.format(ctx.message)
+    user_id = "{}".format(ctx.author.id)
     server = "{}".format(ctx.guild.id)
-    if config.has_option(server, user):
-        size = config[server][user]
+    if config.has_option(server, user_id):
+        size = config[server][user_id]
     else:
         size = get_size()
     msg = '{0.author.mention} is '.format(ctx.message) + size + " tall."
@@ -66,7 +66,7 @@ async def sizeme(ctx):
     # sizes[user] = size
     if not config.has_section(server):
         config.add_section(server)
-    config[server][user] = size
+    config[server][user_id] = size
     save_config(config)
 
 
@@ -75,7 +75,9 @@ async def showsizes(ctx):
     server = '{}'.format(ctx.guild.id)
     msg = "All sizes:\n"
     for user in config.options(server):
-        msg += user + ": " + config[server][user] + "\n"
+        member = await ctx.guild.fetch_member(user)
+        username = member.nick
+        msg += username + ": " + config[server][user] + "\n"
     await ctx.send(msg)
 
 
