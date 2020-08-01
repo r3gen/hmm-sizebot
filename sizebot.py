@@ -11,6 +11,28 @@ bot = commands.Bot(command_prefix='!')
 
 config_filename = 'hcm_sizebot.ini'
 
+size = [
+        "1 mm",
+        "1 cm",
+        "1 inch",
+        "3 inch",
+        "6 inch",
+        "1 foot",
+        "3 foot",
+        "6 foot",
+        "12 foot",
+        "50 foot",
+        "100 foot",
+        "200 foot",
+        "400 foot",
+        "500 foot",
+        "600 foot",
+        "800 foot",
+        "1000 foot",
+        "2000 foot",
+        "3000 foot",
+        "5000 foot"
+    ]
 
 def load_config():
     bot_config = ConfigParser()
@@ -99,29 +121,7 @@ async def on_ready():
 
 
 def get_size():
-    size = {
-        1: "1 mm",
-        2: "1 cm",
-        3: "1 inch",
-        4: "3 inch",
-        5: "6 inch",
-        6: "1 foot",
-        7: "3 foot",
-        8: "6 foot",
-        9: "12 foot",
-        10: "50 foot",
-        11: "100 foot",
-        12: "200 foot",
-        13: "400 foot",
-        14: "500 foot",
-        15: "600 foot",
-        16: "800 foot",
-        17: "1000 foot",
-        18: "2000 foot",
-        19: "3000 foot",
-        20: "5000 foot"
-    }
-    return size.get(random.randint(1, 20), "No size for you")
+    return size[random.randint(1, len(size))]
 
 
 bot.run(TOKEN)
