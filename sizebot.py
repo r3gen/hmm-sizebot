@@ -1,11 +1,11 @@
 # Work with Python 3.6
 
 import random
-import discord
 from configparser import ConfigParser
 from datetime import datetime
-from discord.ext import commands
 from os import path
+
+from discord.ext import commands
 
 bot = commands.Bot(command_prefix='!')
 
@@ -98,10 +98,6 @@ async def on_ready():
     print('------')
 
 
-def get_stats():
-    return null
-
-
 def get_size():
     size = {
         1: "1 mm",
@@ -125,7 +121,7 @@ def get_size():
         19: "3000 foot",
         20: "5000 foot"
     }
-    return size.get(random.randint(1,20),"No size for you")
+    return size.get(random.randint(1, 20), "No size for you")
 
 
 bot.run(TOKEN)
