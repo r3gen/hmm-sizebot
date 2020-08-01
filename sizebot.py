@@ -1,49 +1,98 @@
 # Work with Python 3.6
+
 import random
 import discord
+from configparser import ConfigParser
+from datetime import datetime
 from discord.ext import commands
+from os import path
 
 bot = commands.Bot(command_prefix='!')
 
+config_filename = 'hcm_sizebot.ini'
+
+
+def load_config():
+    bot_config = ConfigParser()
+    if path.exists(config_filename):
+        bot_config.read(config_filename)
+        last_date = datetime.fromisoformat(bot_config["Default"]["last_reset"])
+        if last_date.date() < datetime.now().date():
+            for section in bot_config.sections():
+                if section != "Default":
+                    bot_config.remove_section(section)
+            bot_config["Default"]["last_reset"] = datetime.now().isoformat()
+            save_config(bot_config)
+    else:
+        bot_config['Default'] = {
+            "reset_hour": '5',
+            "last_reset": datetime.now()
+        }
+        save_config(bot_config)
+
+    return bot_config
+
+
+def save_config(bot_config):
+    with open(config_filename, 'w') as config_file:
+        bot_config.write(config_file)
+
+
 def read_token():
-    import os
-    return os.environ["SIZEBOT_TOKEN"]
-    '''
-        with open("token.txt", "r") as f:
-            lines = f.readlines()
-            return lines[0].strip()
-    '''
+    # import os
+    # return os.environ["SIZEBOT_TOKEN"]
+    with open("token.txt", "r") as f:
+        lines = f.readlines()
+        return lines[0].strip()
+
 
 TOKEN = read_token()
 
 sizes = dict()
 
+config = load_config()
+
+
 @bot.command()
 async def sizeme(ctx):
-    size = get_size()
-    user = '{0.author.display_name}'.format(ctx.message)
-    # server = '{0.server.id}'.format(ctx.message)
+    user_id = "{}".format(ctx.author.id)
+    server = "{}".format(ctx.guild.id)
+    if config.has_option(server, user_id):
+        size = config[server][user_id]
+    else:
+        size = get_size()
     msg = '{0.author.mention} is '.format(ctx.message) + size + " tall."
     await ctx.send(msg)
-    sizes[user] = size
-    
+    # sizes[user] = size
+    if not config.has_section(server):
+        config.add_section(server)
+    config[server][user_id] = size
+    save_config(config)
+
+
 @bot.command()
 async def showsizes(ctx):
+    server = '{}'.format(ctx.guild.id)
     msg = "All sizes:\n"
-    for user in sizes.keys():
-        msg += user + ": " + sizes[user] + "\n"
+    for user in config.options(server):
+        member = await ctx.guild.fetch_member(user)
+        username = member.nick
+        msg += username + ": " + config[server][user] + "\n"
     await ctx.send(msg)
-    
+
+
 @bot.event
 async def on_ready():
     print('Logged in as')
     print(bot.user.name)
     print(bot.user.id)
     print('------')
-    
+
+
 def get_stats():
     return null
-    
+
+
 def get_size():
     size = {
         1: "1 mm",
@@ -68,5 +117,6 @@ def get_size():
         20: "5000 foot"
     }
     return size.get(random.randint(1,20),"No size for you")
+
 
 bot.run(TOKEN)
