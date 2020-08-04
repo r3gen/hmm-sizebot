@@ -54,16 +54,17 @@ def save_config(bot_config):
         bot_config.write(config_file)
 
 
-def reset_config(bot_config, serverid: None):
+def reset_config(bot_config, server_id: None):
+    if server_id is not None:
+        if not bot_config.has_section(server_id):
+            bot_config.add_section(server_id)
+
     last_date = datetime.fromisoformat(bot_config["Default"]["last_reset"])
     if last_date.date() < datetime.now().date():
         for section in bot_config.sections():
             if section != "Default":
                 bot_config.remove_section(section)
                 bot_config.add_section(section)
-            if serverid is not None:
-                if not bot_config.has_section(section):
-                    bot_config.add_section(serverid)
         bot_config["Default"]["last_reset"] = datetime.now().isoformat()
         save_config(bot_config)
 
@@ -108,6 +109,9 @@ async def showsizes(ctx):
     reset_config(config, server)
 
     user_list = {}
+    if not config.has_section(server):
+        await ctx.send("SERVER NOT FOUND... but this should be impossible")
+        return
     for user in config.options(server):
         user_list[user] = config[server][user]
 

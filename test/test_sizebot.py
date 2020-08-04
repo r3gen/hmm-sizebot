@@ -38,7 +38,7 @@ class MyTestCase(unittest.TestCase):
         config[ID_SERVER1]['000003'] = self.size[7]
 
         this_list = {}
-        for user in config.options(ID_SERVER1):
+        for user in config[ID_SERVER1]:
             this_list[user] = config[ID_SERVER1][user]
         self.assertEqual(len(this_list), 3)
         print(this_list)
