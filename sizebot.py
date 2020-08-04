@@ -80,8 +80,6 @@ def read_token():
 
 TOKEN = read_token()
 
-sizes = dict()
-
 config = load_config()
 
 
@@ -105,7 +103,7 @@ async def sizeme(ctx):
 
 @bot.command()
 async def showsizes(ctx):
-    server = ctx.guild.id
+    server = str(ctx.guild.id)
     reset_config(config, server)
 
     user_list = {}
