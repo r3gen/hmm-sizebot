@@ -54,13 +54,16 @@ def save_config(bot_config):
         bot_config.write(config_file)
 
 
-def reset_config(bot_config):
+def reset_config(bot_config, serverid: None):
     last_date = datetime.fromisoformat(bot_config["Default"]["last_reset"])
     if last_date.date() < datetime.now().date():
         for section in bot_config.sections():
             if section != "Default":
                 bot_config.remove_section(section)
                 bot_config.add_section(section)
+            if serverid is not None:
+                if not bot_config.has_section(section):
+                    bot_config.add_section(serverid)
         bot_config["Default"]["last_reset"] = datetime.now().isoformat()
         save_config(bot_config)
 
@@ -101,8 +104,8 @@ async def sizeme(ctx):
 
 @bot.command()
 async def showsizes(ctx):
-    reset_config(config)
     server = ctx.guild.id
+    reset_config(config, server)
 
     user_list = {}
     for user in config.options(server):
