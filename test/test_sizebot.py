@@ -49,6 +49,11 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(sorted_list[1], '000003')
         self.assertEqual(sorted_list[2], '000002')
 
+        msg = "All sizes:\n"
+        for userid in sorted_list:
+            msg += userid + ": " + this_list[userid] + "\n"
+        print(msg)
+
 
 if __name__ == '__main__':
     unittest.main()
