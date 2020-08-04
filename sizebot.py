@@ -54,7 +54,7 @@ def save_config(bot_config):
         bot_config.write(config_file)
 
 
-def reset_config(bot_config, server_id: None):
+def reset_config(bot_config, server_id=None):
     if server_id is not None:
         if not bot_config.has_section(server_id):
             bot_config.add_section(server_id)
