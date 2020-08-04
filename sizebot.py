@@ -103,12 +103,15 @@ async def sizeme(ctx):
 async def showsizes(ctx):
     reset_config(config)
     server = ctx.guild.id
-    size_list = sorted(config[server].items(), key=lambda x: x[1], reverse=True)
+    user_list = {}
+    for user in config.options(server):
+        user_list[user] = config[server][user]
+    sorted_list = sorted(user_list, key=lambda x: size.index(user_list[x]), reverse=True)
     msg = "All sizes:\n"
-    for user in size_list:
-        member = await ctx.guild.fetch_member(user[0])
+    for user in sorted_list:
+        member = await ctx.guild.fetch_member(user)
         username = member.display_name
-        msg += username + ": " + user[1] + "\n"
+        msg += username + ": " + user_list[user] + "\n"
     await ctx.send(msg)
 
 
