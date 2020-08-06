@@ -5,6 +5,7 @@ from configparser import ConfigParser
 from datetime import datetime
 from os import path
 
+from discord import Permissions
 from discord.ext import commands
 
 bot = commands.Bot(command_prefix='!')
@@ -120,6 +121,12 @@ async def showsizes(ctx):
         member = await ctx.guild.fetch_member(userid)
         msg += member.display_name + ": " + user_list[userid] + "\n"
     await ctx.send(msg)
+
+
+@bot.command()
+@commands.has_permissions(manage_roles=True)
+async def sizeuser(ctx, arg):
+    await ctx.send("This command not yet implemented.")
 
 
 @bot.event
