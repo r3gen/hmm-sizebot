@@ -137,7 +137,7 @@ async def sizeuser(ctx, arg=None):
         await ctx.send("Member {} not found. Trying `!listmembers` to find the user'd ID.".format(arg))
         return
 
-    user_id = member.id
+    user_id = str(member.id)
     reset_config(config)
     if config.has_option(server_id, user_id):
         user_size = config[server_id][user_id]
