@@ -5,8 +5,8 @@ from configparser import ConfigParser
 from datetime import datetime
 from os import path
 
-from discord import Permissions
-from discord.ext import commands, Embed
+from discord import Permissions, Embed
+from discord.ext import commands
 
 bot = commands.Bot(command_prefix='!')
 
