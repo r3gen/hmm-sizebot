@@ -6,7 +6,7 @@ from datetime import datetime
 from os import path
 
 from discord import Permissions
-from discord.ext import commands
+from discord.ext import commands, Embed
 
 bot = commands.Bot(command_prefix='!')
 
@@ -127,6 +127,20 @@ async def showsizes(ctx):
 @commands.has_permissions(manage_roles=True)
 async def sizeuser(ctx, arg):
     await ctx.send("This command not yet implemented.")
+
+
+@bot.command()
+@commands.has_permissions(manage_roles=True)
+async def listmembers(ctx):
+    await ctx.send("This command not yet implemented.")
+    embed_msg = Embed(
+        title="User ID List",
+        description="A list of server members and thier discord user IDs.",
+        colour=discord.Colour.blue()
+    )
+    for member in ctx.guild.get_all_members():
+        embed_msg.add_field(name=member.display_name, value=member.id)
+    bot.say(embed=embed_msg)
 
 
 @bot.event
