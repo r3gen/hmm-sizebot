@@ -116,11 +116,16 @@ async def showsizes(ctx):
 
     sorted_list = sorted(user_list, key=lambda x: size.index(user_list[x]), reverse=True)
 
-    msg = "All sizes:\n"
-    for userid in sorted_list:
-        member = await ctx.guild.fetch_member(userid)
-        msg += member.display_name + ": " + user_list[userid] + "\n"
-    await ctx.send(msg)
+    embed_msg = Embed(
+        title="All Sizes",
+        description="Server member sizes.",
+        colour=Colour.blue()
+    )
+
+    for user_id in sorted_list:
+        member = await ctx.guild.fetch_member(user_id)
+        embed_msg.add_field(name=member.display_name, value=user_list[user_id], inline=False)
+    await ctx.send(embed=embed_msg)
 
 
 @bot.command()
@@ -156,7 +161,7 @@ async def sizeuser(ctx, arg=None):
 async def listmembers(ctx):
     embed_msg = Embed(
         title="User ID List",
-        description="A list of server members and thier discord user IDs.",
+        description="A list of server members and their discord user IDs.",
         colour=Colour.blue()
     )
     for member in ctx.guild.members:
