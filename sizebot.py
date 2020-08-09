@@ -118,13 +118,12 @@ async def showsizes(ctx):
 
     embed_msg = Embed(
         title="All Sizes",
-        description="Server member sizes.",
         colour=Colour.blue()
     )
 
     for user_id in sorted_list:
         member = await ctx.guild.fetch_member(user_id)
-        embed_msg.add_field(name=member.display_name, value=user_list[user_id], inline=False)
+        embed_msg.add_field(name=member.display_name, value=user_list[user_id], inline=True)
     await ctx.send(embed=embed_msg)
 
 
