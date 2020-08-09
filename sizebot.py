@@ -125,14 +125,11 @@ async def showsizes(ctx):
 
 @bot.command()
 @commands.has_permissions(manage_roles=True)
-async def sizeuser(ctx):
-    await ctx.send("You must specify a user's ID with this command. "
-                   "(e.g. \"!sizeuser 000000000000000000\"\nFor a list of user IDs: !listmembers")
-
-
-@bot.command()
-@commands.has_permissions(manage_roles=True)
-async def sizeuser(ctx, arg):
+async def sizeuser(ctx, arg=None):
+    if arg is None:
+        await ctx.send("You must specify a user's ID with this command. "
+                       "(e.g. \"!sizeuser 000000000000000000\"\nFor a list of user IDs: !listmembers")
+        return
     await ctx.send("This command not yet implemented.")
 
 
