@@ -126,11 +126,29 @@ async def showsizes(ctx):
 @bot.command()
 @commands.has_permissions(manage_roles=True)
 async def sizeuser(ctx, arg=None):
+    server_id = str(ctx.guild.id)
     if arg is None:
-        await ctx.send("You must specify a user's ID with this command. "
-                       "(e.g. \"!sizeuser 000000000000000000\"\nFor a list of user IDs: !listmembers")
+        await ctx.send("You must specify a user's ID with this command. For example:\n"
+                       "`!sizeuser 000000000000000000`\nFor a list of user IDs: !listmembers")
         return
-    await ctx.send("This command not yet implemented.")
+
+    member = ctx.guild.get_member(arg)
+    if member is None:
+        await ctx.send("Member {} not found. Trying `!listmembers` to find the user'd ID.".format(arg))
+        return
+
+    user_id = member.id
+    reset_config(config)
+    if config.has_option(server_id, user_id):
+        user_size = config[server_id][user_id]
+    else:
+        user_size = get_size()
+    msg = '{} is {} tall.'.format(member.mention, user_size)
+    await ctx.send(msg)
+    if not config.has_section(server_id):
+        config.add_section(server_id)
+    config[server_id][user_id] = user_size
+    save_config(config)
 
 
 @bot.command()
