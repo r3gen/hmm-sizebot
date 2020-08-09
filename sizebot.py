@@ -132,7 +132,7 @@ async def sizeuser(ctx, arg=None):
                        "`!sizeuser 000000000000000000`\nFor a list of user IDs: !listmembers")
         return
 
-    member = ctx.guild.fetch_member(arg)
+    member = await ctx.guild.fetch_member(arg)
     if member is None:
         await ctx.send("Member {} not found. Trying `!listmembers` to find the user'd ID.".format(arg))
         return
