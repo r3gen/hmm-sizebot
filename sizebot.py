@@ -138,7 +138,7 @@ async def listmembers(ctx):
         description="A list of server members and thier discord user IDs.",
         colour=Colour.blue()
     )
-    for member in ctx.guild.get_all_members():
+    for member in ctx.guild.members:
         embed_msg.add_field(name=member.display_name, value=member.id)
     bot.say(embed=embed_msg)
 
