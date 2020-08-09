@@ -125,6 +125,13 @@ async def showsizes(ctx):
 
 @bot.command()
 @commands.has_permissions(manage_roles=True)
+async def sizeuser(ctx):
+    await ctx.send("You must specify a user's ID with this command. "
+                   "(e.g. \"!sizeuser 000000000000000000\"\nFor a list of user IDs: !listmembers")
+
+
+@bot.command()
+@commands.has_permissions(manage_roles=True)
 async def sizeuser(ctx, arg):
     await ctx.send("This command not yet implemented.")
 
@@ -140,7 +147,7 @@ async def listmembers(ctx):
     )
     for member in ctx.guild.members:
         embed_msg.add_field(name=member.display_name, value=member.id)
-    bot.say(embed=embed_msg)
+    ctx.send(embed=embed_msg)
 
 
 @bot.event
