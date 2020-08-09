@@ -144,7 +144,7 @@ async def listmembers(ctx):
     )
     for member in ctx.guild.members:
         embed_msg.add_field(name=member.display_name, value=member.id)
-    ctx.send(embed=embed_msg)
+    await ctx.send(embed=embed_msg)
 
 
 @bot.event
