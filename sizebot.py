@@ -5,6 +5,7 @@ from configparser import ConfigParser
 from datetime import datetime
 from os import path
 
+from discord import Permissions, Embed, Colour
 from discord.ext import commands
 
 bot = commands.Bot(command_prefix='!')
@@ -115,11 +116,56 @@ async def showsizes(ctx):
 
     sorted_list = sorted(user_list, key=lambda x: size.index(user_list[x]), reverse=True)
 
-    msg = "All sizes:\n"
-    for userid in sorted_list:
-        member = await ctx.guild.fetch_member(userid)
-        msg += member.display_name + ": " + user_list[userid] + "\n"
+    embed_msg = Embed(
+        title="All Sizes",
+        colour=Colour.blue()
+    )
+
+    for user_id in sorted_list:
+        member = await ctx.guild.fetch_member(user_id)
+        embed_msg.add_field(name=member.display_name, value=user_list[user_id], inline=True)
+    await ctx.send(embed=embed_msg)
+
+
+@bot.command()
+@commands.has_permissions(manage_roles=True)
+async def sizeuser(ctx, arg=None):
+    server_id = str(ctx.guild.id)
+    if arg is None:
+        await ctx.send("You must specify a user's ID with this command. For example:\n"
+                       "`!sizeuser 000000000000000000`\nFor a list of user IDs: !listmembers")
+        return
+
+    member = await ctx.guild.fetch_member(arg)
+    if member is None:
+        await ctx.send("Member {} not found. Trying `!listmembers` to find the user'd ID.".format(arg))
+        return
+
+    user_id = str(member.id)
+    reset_config(config)
+    if config.has_option(server_id, user_id):
+        user_size = config[server_id][user_id]
+    else:
+        user_size = get_size()
+    msg = '{} is {} tall.'.format(member.mention, user_size)
     await ctx.send(msg)
+    if not config.has_section(server_id):
+        config.add_section(server_id)
+    config[server_id][user_id] = user_size
+    save_config(config)
+
+
+@bot.command()
+@commands.has_permissions(manage_roles=True)
+async def listmembers(ctx):
+    embed_msg = Embed(
+        title="User ID List",
+        description="A list of server members and their discord user IDs.",
+        colour=Colour.blue()
+    )
+    for member in ctx.guild.members:
+        embed_msg.add_field(name=member.display_name, value=member.id, inline=False)
+    await ctx.send(embed=embed_msg)
 
 
 @bot.event
