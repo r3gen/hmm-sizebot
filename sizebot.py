@@ -5,7 +5,7 @@ from configparser import ConfigParser
 from datetime import datetime
 from os import path
 
-from discord import Permissions, Embed
+from discord import Permissions, Embed, Colour
 from discord.ext import commands
 
 bot = commands.Bot(command_prefix='!')
@@ -136,7 +136,7 @@ async def listmembers(ctx):
     embed_msg = Embed(
         title="User ID List",
         description="A list of server members and thier discord user IDs.",
-        colour=discord.Colour.blue()
+        colour=Colour.blue()
     )
     for member in ctx.guild.get_all_members():
         embed_msg.add_field(name=member.display_name, value=member.id)
