@@ -1,8 +1,8 @@
-# Work with Python 3.6
+# Work with Python 3.6+
 
 import random
 from configparser import ConfigParser
-from datetime import datetime
+from datetime import datetime, timedelta
 from os import path
 
 from discord import Permissions, Embed, Colour
@@ -35,6 +35,7 @@ size = [
         "5000 foot"
     ]
 
+
 def load_config():
     bot_config = ConfigParser()
     if path.exists(config_filename):
@@ -42,7 +43,7 @@ def load_config():
         reset_config(bot_config)
     else:
         bot_config['Default'] = {
-            "reset_hour": '5',
+            "reset_hour_offset": '5',
             "last_reset": datetime.now().isoformat()
         }
         save_config(bot_config)
@@ -61,7 +62,8 @@ def reset_config(bot_config, server_id=None):
             bot_config.add_section(server_id)
 
     last_date = datetime.fromisoformat(bot_config["Default"]["last_reset"])
-    if last_date.date() < datetime.now().date():
+    now = datetime.now() - timedelta(hours=bot_config["Default"]["reset_hour_offset"])
+    if last_date.date() < now.date():
         for section in bot_config.sections():
             if section != "Default":
                 bot_config.remove_section(section)
