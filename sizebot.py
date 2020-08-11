@@ -62,7 +62,7 @@ def reset_config(bot_config, server_id=None):
             bot_config.add_section(server_id)
 
     last_date = datetime.fromisoformat(bot_config["Default"]["last_reset"])
-    now = datetime.now() - timedelta(hours=bot_config["Default"]["reset_hour_offset"])
+    now = datetime.now() - timedelta(hours=int(bot_config["Default"]["reset_hour_offset"]))
     if last_date.date() < now.date():
         for section in bot_config.sections():
             if section != "Default":
