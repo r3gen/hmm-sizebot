@@ -1,4 +1,4 @@
-name: CI (pip)
+name: CI
 on: [push]
 
 jobs:
@@ -32,4 +32,6 @@ jobs:
           flake8 . --count --exit-zero --max-complexity=10 --statistics
 
       - name: Execute tests
-        run: python -m unittest test/test_sizebot.py
+        run: |
+         pwd
+         python -m unittest test/test_sizebot.py
