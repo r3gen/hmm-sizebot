@@ -1,7 +1,6 @@
 # hcm-sizebot
 
-##Overview
-
+## Overview
 hcm-sizebot is a discord bot that when connected to a server allows users to be assigned a 
 size (e.g. 6ft, 12ft, etc.) when requested by a command.
 
