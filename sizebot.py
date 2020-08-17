@@ -5,7 +5,7 @@ from configparser import ConfigParser
 from datetime import datetime, timedelta
 from os import path
 
-from discord import Permissions, Embed, Colour
+from discord import Embed, Colour
 from discord.ext import commands
 
 bot = commands.Bot(command_prefix='!')
@@ -75,10 +75,9 @@ def reset_config(bot_config, server_id=None):
 def read_token():
     import os
     return os.environ["SIZEBOT_TOKEN"]
-    '''with open("token.txt", "r") as f:
-        lines = f.readlines()
-        return lines[0].strip()
-    '''
+    # with open("token.txt", "r") as f:
+    #     lines = f.readlines()
+    #     return lines[0].strip()
 
 
 TOKEN = read_token()
@@ -179,7 +178,7 @@ async def on_ready():
 
 
 def get_size():
-    return size[random.randint(1, len(size))]
+    return size[random.randint(1, len(size)) - 1]
 
 
 bot.run(TOKEN)
