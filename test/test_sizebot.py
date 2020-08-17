@@ -1,3 +1,4 @@
+import random
 import unittest
 
 from configparser import ConfigParser
@@ -53,6 +54,14 @@ class MyTestCase(unittest.TestCase):
         for userid in sorted_list:
             msg += userid + ": " + this_list[userid] + "\n"
         print(msg)
+
+    def test_get_size(self):
+        for i in range(100):
+            try:
+                self.size[random.randint(1, len(self.size)) - 1]
+            except IndexError:
+                self.assertTrue(False, "Encountered IndexError during get_size()")
+        self.assertTrue(True)
 
 
 if __name__ == '__main__':
