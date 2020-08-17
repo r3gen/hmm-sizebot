@@ -1,5 +1,11 @@
 name: CI
-on: [push]
+on: 
+  push:
+    
+  # Run tests for any PRs.
+  pull_request:
+    branches:
+      - master
 
 jobs:
   build:
