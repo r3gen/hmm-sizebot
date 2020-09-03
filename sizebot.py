@@ -159,14 +159,17 @@ async def sizeuser(ctx, arg=None):
 @bot.command()
 @commands.has_permissions(manage_roles=True)
 async def listmembers(ctx):
-    embed_msg = Embed(
-        title="User ID List",
-        description="A list of server members and their discord user IDs.",
-        colour=Colour.blue()
-    )
+    # embed_msg = Embed(
+    #     title="User ID List",
+    #     description="A list of server members and their discord user IDs.",
+    #     colour=Colour.blue()
+    # )
+    await ctx.send("USER ID LIST")
     for member in ctx.guild.members:
-        embed_msg.add_field(name=member.display_name, value=member.id, inline=False)
-    await ctx.send(embed=embed_msg)
+        await ctx.send("*{}*:".format(member.display_name))
+        await ctx.send(member.id)
+        # embed_msg.add_field(name=member.display_name, value=member.id, inline=False)
+    # await ctx.send(embed=embed_msg)
 
 
 @bot.event
